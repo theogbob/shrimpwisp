@@ -1,6 +1,6 @@
-# shrimpwisp
+# shrimpwisp [NOT FOR PROD USE]
 
-**BETA** - The fastest Wisp v2.1 proxy server.
+**BETA/PoC** - The fastest Wisp v2.1 proxy server.
 
 Built in Rust. Thread-per-core architecture. Beats every other Wisp implementation on throughput benchmarks, including mrrowisp (Go), epoxy-server, and wisp-js.
 

@@ -1,0 +1,78 @@
+[package]
+name = "shrimpwisp"
+version = "0.9.0-beta"
+edition = "2024"
+description = "The fastest spec-compliant Wisp v2.1 server"
+license = "MIT"
+
+[dependencies]
+# Runtime: Tokio ThreadPerCore (Phase 1)
+tokio = { version = "1", features = ["rt", "net", "io-util", "macros", "sync", "time"] }
+
+# WebSocket: fastest with Hyper upgrade support
+fastwebsockets = { version = "0.10", features = ["upgrade", "unstable-split"], path = "vendor/fastwebsockets" }
+# tokio-websockets = { version = "0.12", features = ["server", "sha1_smol"] }
+hyper = { version = "1", features = ["http1", "server"] }
+http-body-util = "0.1"
+hyper-util = { version = "0.1", features = ["tokio"] }
+
+# Buffer management: zero-copy foundation
+bytes = "1"
+
+# Socket control
+socket2 = { version = "0.5", features = ["all"] }
+
+# OS thread priority (SCHED_FIFO)
+libc = "0.2"
+
+# Constant-time comparison (auth)
+subtle = "2"
+
+# Core pinning
+core_affinity = "0.8"
+
+# Allocator
+tikv-jemallocator = { version = "0.6", features = ["background_threads"] }
+
+# Logging
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter", "json"] }
+
+# Error handling
+thiserror = "2"
+
+# CLI args
+clap = { version = "4", features = ["derive"] }
+
+# JSON config file support
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# Multi-user bcrypt auth
+bcrypt = "0.15"
+
+# DNS: uses tokio::net::lookup_host (OS resolver) + manual HashMap cache.
+# No hickory-resolver — it pulled in ring/rustls/icu/moka (~82 crates)
+# which bloated the binary and caused i-cache pressure on the hot loop.
+
+# IP network/CIDR parsing for trusted proxies
+ipnet = "2"
+
+[dev-dependencies]
+tokio-tungstenite = "0.26"
+futures-util = "0.3"
+criterion = { version = "0.5", features = ["async_tokio"] }
+
+[profile.release]
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+opt-level = 3
+strip = true
+
+[profile.release.build-override]
+opt-level = 3
+
+[[bench]]
+name = "hot_path"
+harness = false

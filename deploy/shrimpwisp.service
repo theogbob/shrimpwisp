@@ -1,0 +1,37 @@
+[Unit]
+Description=shrimpwisp - Wisp v2.1 proxy server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=wisp
+Group=wisp
+ExecStart=/usr/local/bin/shrimpwisp --prod --config /etc/shrimpwisp/config.json
+Restart=on-failure
+RestartSec=5
+
+# Security hardening
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+
+# Allow SCHED_FIFO (--prod mode uses real-time scheduling)
+AmbientCapabilities=CAP_SYS_NICE CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_SYS_NICE CAP_NET_BIND_SERVICE CAP_SYS_RESOURCE
+
+# Resource limits
+LimitNOFILE=1048576
+LimitMEMLOCK=infinity
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=shrimpwisp
+
+[Install]
+WantedBy=multi-user.target

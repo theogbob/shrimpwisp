@@ -1,0 +1,76 @@
+{
+  "_comment": "shrimpwisp configuration — all fields optional, defaults shown",
+
+  "bind": "0.0.0.0:4000",
+  "workers": 0,
+  "_comment_workers": "0 = auto-detect physical core count",
+
+  "bufferSize": 65535,
+  "tcpNoDelay": true,
+  "allowLoopback": true,
+  "allowDirectIp": true,
+  "allowPrivateIps": true,
+  "maxStreams": 0,
+  "maxFrameSize": 0,
+
+  "prod": false,
+  "_comment_prod": "Enables SO_ZEROCOPY, SCHED_FIFO, mlockall, and sets sensible production defaults below",
+
+  "logLevel": "info",
+  "logFormat": "text",
+  "_comment_logFormat": "\"text\" (human-readable) or \"json\" (structured, for log aggregators)",
+
+  "maxConnections": 0,
+  "_comment_maxConnections": "Per-worker limit. --prod default: 8192. 0 = unlimited",
+
+  "idleTimeoutSecs": 0,
+  "_comment_idleTimeoutSecs": "--prod default: 300 (5 min). 0 = disabled",
+
+  "maxConnectionsPerIp": 0,
+  "_comment_maxConnectionsPerIp": "--prod default: 64. 0 = unlimited. Per-worker approximate",
+
+  "connectionWindowSecs": 60,
+  "_comment_connectionWindowSecs": "Window for per-IP rate limiting",
+
+  "wsPingIntervalSecs": 0,
+  "_comment_wsPingIntervalSecs": "--prod default: 30. 0 = disabled",
+
+  "wsPongTimeoutSecs": 10,
+  "_comment_wsPongTimeoutSecs": "Seconds to wait for pong after ping before closing",
+
+  "tcpKeepaliveSecs": 0,
+  "_comment_tcpKeepaliveSecs": "--prod default: 60. 0 = disabled. Applied to backend TCP sockets",
+
+  "blacklist": {
+    "_comment": "Block specific hostnames and/or ports. Ports can be a single number or [start, end] range",
+    "hostnames": [],
+    "ports": [25, [80, 443]]
+  },
+
+  "whitelist": {
+    "_comment": "When non-empty, ONLY these hostnames/ports are allowed (overrides blacklist)",
+    "hostnames": [],
+    "ports": []
+  },
+
+  "auth": {
+    "required": false,
+    "users": {
+      "_comment": "username -> password or bcrypt hash. Example bcrypt (password='test'):",
+      "_example_user": "$2b$12$LJ3m4ys3Lg7Eqhvlfn.JduGDBWCR0FDVcnXlMBGqpYqnqYfHJBCam"
+    }
+  },
+
+  "dns": {
+    "servers": [],
+    "_comment_servers": "Custom DNS servers, e.g. [\"8.8.8.8\", \"1.1.1.1\"]",
+    "ttl": 120,
+    "resultOrder": "ipv4first"
+  },
+
+  "realIp": {
+    "enabled": false,
+    "trustedProxies": ["127.0.0.1/32", "::1/128"],
+    "headers": ["X-Forwarded-For", "X-Real-IP"]
+  }
+}

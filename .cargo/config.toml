@@ -1,0 +1,8 @@
+[build]
+rustflags = ["-C", "target-cpu=native"]
+
+[env]
+# jemalloc: raise tcache max from 32KB to 128KB so 65KB backend buffers
+# hit the fast thread-local free list instead of going through arena mutex.
+# metadata_thp: use transparent huge pages for jemalloc metadata.
+JEMALLOC_SYS_WITH_MALLOC_CONF = "lg_tcache_max:17,metadata_thp:always"
